@@ -25,9 +25,6 @@ public class CameraController : MonoBehaviour {
 
 			// The anchor is set to the same place.
 			selectionBox.anchoredPosition = startSelectionPosition;
-			selectionBox.offsetMax = Vector2.zero;
-			selectionBox.offsetMin = Vector2.zero;
-			selectionBox.pivot = Vector2.zero;
 		}
 		// Stop selection, reset everything
 		else if (Input.GetMouseButtonUp(0))
@@ -41,51 +38,9 @@ public class CameraController : MonoBehaviour {
 
 		if (isDragging && Input.GetMouseButton(0))
 		{
-			// Store the current mouse position in screen space.
-			Vector2 currentMousePosition = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
+			SetupSelectionUI();
 
-			// How far have we moved the mouse?
-			Vector2 difference = currentMousePosition - startSelectionPosition;
-
-			// Copy the initial click position to a new variable. Using the original variable will cause
-			// the anchor to move around to wherever the current mouse position is,
-			// which isn't desirable.
-			Vector2 startPoint = startSelectionPosition;
-			
-			// The following code accounts for dragging in various directions.
-			if (difference.x < 0)
-			{
-				startPoint.x = currentMousePosition.x;
-				difference.x = -difference.x;
-			}
-			if (difference.y < 0)
-			{
-				startPoint.y = currentMousePosition.y;
-				difference.y = -difference.y;
-			}
-
-			isSelecting = difference.SqrMagnitude() > 0;
-
-			// Set the anchor, width and height every frame.
-			startPoint.y += 27f; // fix for random offset appearing
-			selectionBox.anchoredPosition = startPoint;
-			selectionBox.sizeDelta = difference;
-
-			selectionRectangle.x = startSelectionPosition.x;
-			selectionRectangle.y = WorldToScreenY(startSelectionPosition.y);
-			selectionRectangle.width = Input.mousePosition.x - startSelectionPosition.x;
-			selectionRectangle.height = WorldToScreenY(Input.mousePosition.y) - WorldToScreenY(startSelectionPosition.y);
-
-			if (selectionRectangle.width < 0)
-			{
-				selectionRectangle.x += selectionRectangle.width;
-				selectionRectangle.width = -selectionRectangle.width;
-			}
-			if (selectionRectangle.height < 0)
-			{
-				selectionRectangle.y += selectionRectangle.height;
-				selectionRectangle.height = -selectionRectangle.height;
-			}
+			SetupSelectionRect();
 		}
 	}
 
@@ -123,23 +78,75 @@ public class CameraController : MonoBehaviour {
 	void CalculateMovement(out float h, out float v)
 	{
 		h = Input.GetAxisRaw ("Horizontal");
-		if (Input.mousePosition.x + horizontalMargin > Screen.width)
-		{
-			h = 1;
-		} 
-		else if (Input.mousePosition.x - horizontalMargin < 0f)
-		{
-			h = -1;
-		}
+//		if (Input.mousePosition.x + horizontalMargin > Screen.width)
+//		{
+//			h = 1;
+//		} 
+//		else if (Input.mousePosition.x - horizontalMargin < 0f)
+//		{
+//			h = -1;
+//		}
 		
 		v = Input.GetAxisRaw ("Vertical");
-		if (Input.mousePosition.y + verticalMargin > Screen.height)
+//		if (Input.mousePosition.y + verticalMargin > Screen.height)
+//		{
+//			v = 1;
+//		} 
+//		else if (Input.mousePosition.y - verticalMargin < 0f)
+//		{
+//			v = -1;
+//		}
+	}
+	
+	void SetupSelectionUI()
+	{
+		// Store the current mouse position in screen space.
+		Vector2 currentMousePosition = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
+		
+		// How far have we moved the mouse?
+		Vector2 difference = currentMousePosition - startSelectionPosition;
+		
+		// Copy the initial click position to a new variable. Using the original variable will cause
+		// the anchor to move around to wherever the current mouse position is,
+		// which isn't desirable.
+		Vector2 startPoint = startSelectionPosition;
+		
+		// The following code accounts for dragging in various directions.
+		if (difference.x < 0)
 		{
-			v = 1;
-		} 
-		else if (Input.mousePosition.y - verticalMargin < 0f)
+			startPoint.x = currentMousePosition.x;
+			difference.x = -difference.x;
+		}
+		if (difference.y < 0)
 		{
-			v = -1;
+			startPoint.y = currentMousePosition.y;
+			difference.y = -difference.y;
+		}
+		
+		isSelecting = difference.SqrMagnitude() > 0;
+		
+		// Set the anchor, width and height every frame.
+		startPoint.y += 27f; // fix for random offset appearing
+		selectionBox.anchoredPosition = startPoint;
+		selectionBox.sizeDelta = difference;
+	}
+	
+	void SetupSelectionRect()
+	{
+		selectionRectangle.x = startSelectionPosition.x;
+		selectionRectangle.y = WorldToScreenY(startSelectionPosition.y);
+		selectionRectangle.width = Input.mousePosition.x - startSelectionPosition.x;
+		selectionRectangle.height = WorldToScreenY(Input.mousePosition.y) - WorldToScreenY(startSelectionPosition.y);
+		
+		if (selectionRectangle.width < 0)
+		{
+			selectionRectangle.x += selectionRectangle.width;
+			selectionRectangle.width = -selectionRectangle.width;
+		}
+		if (selectionRectangle.height < 0)
+		{
+			selectionRectangle.y += selectionRectangle.height;
+			selectionRectangle.height = -selectionRectangle.height;
 		}
 	}
 }

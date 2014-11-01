@@ -18,8 +18,6 @@ public class Unit : MonoBehaviour {
 	float currentHealth;
 	Slider healthSlider;
 
-	IEnumerator attackRoutine;
-
 	void Awake()
 	{
 		selectionMgr = GetComponent<Selectable> ();
@@ -76,12 +74,6 @@ public class Unit : MonoBehaviour {
 			attackController.StopAttack();
 		}
 
-		if (attackRoutine != null)
-		{
-			StopCoroutine(attackRoutine);
-			attackRoutine = null;
-		}
-
 		return movementMgr ? movementMgr.Move (destination) : false;
 	}
 
@@ -91,11 +83,9 @@ public class Unit : MonoBehaviour {
 
 	public void Attack(Unit objective)
 	{
-		if (objective && attackController && movementMgr && attackRoutine == null)
+		if (objective && attackController)
 		{
-			movementMgr.Stop();
-			attackRoutine = ChaseAndAttack(objective);
-			StartCoroutine(attackRoutine);
+			attackController.StartAttack(objective);
 		}
 	}
 
@@ -116,7 +106,23 @@ public class Unit : MonoBehaviour {
 		Unit unit = other.gameObject.GetComponent<Unit> ();
 		if (unit && unit.teamNumber != teamNumber)
 		{
-			Attack(unit);
+			attackController.UnitEnteredRange(unit);
+			
+			if (movementMgr.GetStatus() == UnitMovement.Status.Idle &&
+			    attackController.GetStance() == AttackController.Stance.Chase &&
+			    attackController.GetStatus() == AttackController.Status.Idle)
+			{
+				attackController.StartAttack(unit);
+			}
+		}
+	}
+	
+	void OnTriggerExit(Collider other)
+	{
+		Unit unit = other.gameObject.GetComponent<Unit> ();
+		if (unit && unit.teamNumber != teamNumber)
+		{
+			attackController.UnitLeftRange(unit);
 		}
 	}
 
@@ -126,31 +132,5 @@ public class Unit : MonoBehaviour {
 		{
 			playerController.UnitDestroyed(this);
 		}
-	}
-
-	IEnumerator ChaseAndAttack(Unit objective)
-	{
-		while (objective)
-		{
-			while (objective && !attackController.IsInRange(objective))
-			{
-				movementMgr.Move (objective.transform.position);
-				yield return null;
-			}
-
-			movementMgr.Stop();
-			if (objective)
-			{
-				attackController.StartAttack(objective);
-			}
-
-			while (objective && attackController.IsInRange(objective))
-			{
-				yield return new WaitForSeconds(0.5f);
-			}
-			attackController.StopAttack();
-		}
-		attackRoutine = null;
-		yield break;
 	}
 }

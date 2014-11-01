@@ -2009,6 +2009,7 @@ MonoBehaviour:
   AttackDamage: 1
   attackRange: 4
   fireRate: 3
+  stance: 1
 --- !u!114 &1096294534
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2339,6 +2340,10 @@ Prefab:
     - target: {fileID: 11400004, guid: 79504077d2bb5074e85487dee00acab5, type: 2}
       propertyPath: playerController
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400006, guid: 79504077d2bb5074e85487dee00acab5, type: 2}
+      propertyPath: stance
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 79504077d2bb5074e85487dee00acab5, type: 2}
@@ -2797,6 +2802,7 @@ MonoBehaviour:
   AttackDamage: 1
   attackRange: 4
   fireRate: 3
+  stance: 1
 --- !u!114 &1527865214
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3440,6 +3446,10 @@ Prefab:
       propertyPath: playerController
       value: 
       objectReference: {fileID: 279192980}
+    - target: {fileID: 11400006, guid: 79504077d2bb5074e85487dee00acab5, type: 2}
+      propertyPath: stance
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 79504077d2bb5074e85487dee00acab5, type: 2}
   m_RootGameObject: {fileID: 1096294524}
@@ -3569,6 +3579,7 @@ MonoBehaviour:
   AttackDamage: 1
   attackRange: 4
   fireRate: 3
+  stance: 0
 --- !u!195 &1757461394
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -3951,6 +3962,7 @@ MonoBehaviour:
   AttackDamage: 1
   attackRange: 4
   fireRate: 3
+  stance: 0
 --- !u!114 &1999005609
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4552,6 +4564,7 @@ MonoBehaviour:
   AttackDamage: 1
   attackRange: 4
   fireRate: 3
+  stance: 0
 --- !u!114 &2126375289
 MonoBehaviour:
   m_ObjectHideFlags: 0

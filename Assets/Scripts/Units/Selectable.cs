@@ -43,6 +43,11 @@ public class Selectable : MonoBehaviour {
 			}
 		}
 	}
+	
+	void OnMouseDown()
+	{
+		playerController.SelectUnit(thisUnit);
+	}
 
 	public bool IsSelected()
 	{

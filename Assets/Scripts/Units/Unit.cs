@@ -79,7 +79,7 @@ public class Unit : MonoBehaviour {
 		if (attackRoutine != null)
 		{
 			StopCoroutine(attackRoutine);
-			//attackRoutine = null;
+			attackRoutine = null;
 		}
 
 		return movementMgr ? movementMgr.Move (destination) : false;
@@ -93,6 +93,7 @@ public class Unit : MonoBehaviour {
 	{
 		if (objective && attackController && movementMgr && attackRoutine == null)
 		{
+			movementMgr.Stop();
 			attackRoutine = ChaseAndAttack(objective);
 			StartCoroutine(attackRoutine);
 		}

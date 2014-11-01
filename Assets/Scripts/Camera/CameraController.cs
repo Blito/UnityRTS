@@ -5,6 +5,8 @@ public class CameraController : MonoBehaviour {
 
 	public float horizontalSpeed = 10f;
 	public float verticalSpeed = 10f;
+	public int verticalMargin = 10;
+	public int horizontalMargin = 10;
 	public float smoothness = 5f;
 	
 	public RectTransform selectionBox;
@@ -19,10 +21,13 @@ public class CameraController : MonoBehaviour {
 		if (Input.GetMouseButtonDown(0))
 		{
 			isDragging = true;
-			startSelectionPosition = Input.mousePosition;
+			startSelectionPosition = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
 
 			// The anchor is set to the same place.
 			selectionBox.anchoredPosition = startSelectionPosition;
+			selectionBox.offsetMax = Vector2.zero;
+			selectionBox.offsetMin = Vector2.zero;
+			selectionBox.pivot = Vector2.zero;
 		}
 		// Stop selection, reset everything
 		else if (Input.GetMouseButtonUp(0))
@@ -62,6 +67,7 @@ public class CameraController : MonoBehaviour {
 			isSelecting = difference.SqrMagnitude() > 0;
 
 			// Set the anchor, width and height every frame.
+			startPoint.y += 27f; // fix for random offset appearing
 			selectionBox.anchoredPosition = startPoint;
 			selectionBox.sizeDelta = difference;
 
@@ -86,8 +92,8 @@ public class CameraController : MonoBehaviour {
 	void FixedUpdate()
 	{
 		// Get movement input
-		float h = Input.GetAxisRaw ("Horizontal");
-		float v = Input.GetAxisRaw ("Vertical");
+		float h, v;		
+		CalculateMovement(out h, out v);
 
 		// Calculate offset
 		Vector3 offset = new Vector3 (h * horizontalSpeed, 0f, v * verticalSpeed);
@@ -112,5 +118,28 @@ public class CameraController : MonoBehaviour {
 	public static float WorldToScreenY(float y)
 	{
 		return Screen.height - y;
+	}
+	
+	void CalculateMovement(out float h, out float v)
+	{
+		h = Input.GetAxisRaw ("Horizontal");
+		if (Input.mousePosition.x + horizontalMargin > Screen.width)
+		{
+			h = 1;
+		} 
+		else if (Input.mousePosition.x - horizontalMargin < 0f)
+		{
+			h = -1;
+		}
+		
+		v = Input.GetAxisRaw ("Vertical");
+		if (Input.mousePosition.y + verticalMargin > Screen.height)
+		{
+			v = 1;
+		} 
+		else if (Input.mousePosition.y - verticalMargin < 0f)
+		{
+			v = -1;
+		}
 	}
 }

@@ -536,6 +536,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   horizontalSpeed: 5
   verticalSpeed: 5
+  verticalMargin: 10
+  horizontalMargin: 10
   smoothness: 5
   selectionBox: {fileID: 460311792}
 --- !u!81 &120510941

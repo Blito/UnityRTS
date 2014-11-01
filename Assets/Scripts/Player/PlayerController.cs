@@ -80,7 +80,7 @@ public class PlayerController : MonoBehaviour {
 		}
 	}
 
-	bool SelectUnit(Unit unit)
+	public bool SelectUnit(Unit unit)
 	{
 		// Clear list of selected units if not pressing shift
 		if (!Input.GetKey (KeyCode.LeftShift)) 
